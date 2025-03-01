@@ -24,6 +24,32 @@ const AddPropertyModal = () => {
   const [propertyGuest, setPropertyGuest] = useState<string>('')
   const [propertyCountry, setPropertyCountry] = useState<SelectCountryValue | undefined>()
   const [propertyImage, setPropertyImage] = useState<File | undefined>()
+  let imageArr: File[] = []
+  let imageUrls: any[] = []
+  const [images, setImages] = useState<File[]>([])
+
+  useEffect(() => {
+    console.log("imageArr", imageArr)
+    console.log('length_imageArr', imageArr.length)
+    console.log("images", images)
+    console.log("length_images", images.length)
+    imageUrls.forEach(image => {
+      console.log("url", image)
+      
+    })
+  },[images, imageUrls])
+
+  const uploadImage = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      imageArr.push(file);
+      imageUrls.push(URL.createObjectURL(imageArr[0]))
+      setImages([...images, ...imageArr]); // Update state with the new files
+    }
+    // imageArr.push(event.target.files[0])
+    // imageUrls.push(URL.createObjectURL(imageArr[0][0]))
+    // setImages(...images, imageArr)
+  }
 
   const incrementStep = () => {
     setCurrentStep(currentStep + 1)
@@ -56,8 +82,8 @@ const AddPropertyModal = () => {
       propertyBedroom && 
       propertyBathroom && 
       propertyGuest && 
-      propertyCountry &&
-      propertyImage
+      propertyCountry 
+      // propertyImage
     ) {
 
       // console.log(propertyBathroom, propertyCategory, propertyTitle, propertyBedroom, propertyGuest, propertyCountry, propertyImage)
@@ -74,7 +100,7 @@ const AddPropertyModal = () => {
       //   country_code: propertyCountry.label,
       //   image: propertyImage,
       // }
-      
+        console.log('submitting')
         const data = new FormData()
         data.append('title', propertyTitle) 
         data.append('category', propertyCategory)
@@ -85,9 +111,13 @@ const AddPropertyModal = () => {
         data.append('guests', propertyGuest)
         data.append('country', propertyCountry.value)
         data.append('country_code', propertyCountry.label)
-        data.append('image', propertyImage)
+        images.forEach(image => 
+          {
+            console.log('image: ' + image)
+            data.append('image', image)
+          });
 
-      // console.log("=============data===========", data)
+        console.log("=============data===========", data)
       
       const response = await apiService.authorizedPost('/api/properties/create/', data)
 
@@ -95,16 +125,20 @@ const AddPropertyModal = () => {
         addPropertyModal.close()
         router.push('/')
       }
-
-      const tmpErrors: string[] = Object.values(response.errors).map((error:any) => {
-        return error
-      })
-      setErrors(tmpErrors)
-      addPropertyModal.close()
-      router.push('/')
-    }
+      else {
+        const tmpErrors: string[] = Object.values(response.errors || {}).map((error:any) => {
+          return error
+        })
+  
+        setErrors(tmpErrors)
+        addPropertyModal.close()
+        router.push('/')
+      }
 
     
+    }
+
+    console.log('after submit')
   }
 
   useEffect(() => {
@@ -201,17 +235,49 @@ const AddPropertyModal = () => {
       </div> */}
     </> :
     <>
+    <div className=''>
+    {images.length > 10 ? null : (
+      <input
+        type="file"
+        name="myfile"
+        onChange={uploadImage}
+        className='flex mb-4'
+      />)}
+    <div className='flex flex-wrap w-full h-auto max-h-[250px] gap-2 overflow-y-scroll'>
+       {images.length !== 0 && images.map((image, index) => (
+         <div className='w-[calc((100%-20px)/3)] h-auto relative rounded-xl' key={index} >
+          <div className='w-full h-[150px] relative'>
+            <Image
+              fill
+              alt='uploaded-image' 
+              src={URL.createObjectURL(image)}
+              className='object-cover w-full h-[150px] rounded-xl'/>
+          </div>
+          <div className='text-center break-words'>
+            {image.name}
+          </div>
+        </div>
+       ))}
+       </div>
+      
+      </div>
+      
+
+   
       <div className='mb-6'>
-        <h3 className="mb-2 mt-2 text-left">Choose an image:</h3>
-        <div className='py-4 px-6 bg-gray-400 rounded-xl text-white text-left'>
-          <input
+        {/* <h3 className="mb-2 mt-2 text-left">Choose an image:</h3> */}
+        {/* <div className='py-4 px-6 bg-gray-400 rounded-xl text-white text-left'> */}
+{/*           
+            <input
             type='file'
             // multiple
             className=''
             accept='image/*'
             onChange={setImage}
-          />
-        </div>
+          /> */}
+          
+          
+        {/* </div> */}
         {propertyImage && 
         <div className='w-[200px] h-[150px] relative mt-4 grid grid-cols-2'>
               <Image

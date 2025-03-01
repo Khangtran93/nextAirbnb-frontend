@@ -4,11 +4,22 @@ import PropertyListItem from './PropertyListItem'
 import { PropertyType } from '@/app/type/type'
 import { useEffect, useState } from 'react'
 import apiService from '@/app/services/apiService'
-const Properties = () => {
+
+interface PropertyListProps {
+  host_id?: string | null
+}
+const Properties: React.FC<PropertyListProps> = (
+  {host_id}
+) => {
   const [properties, setProperties] = useState<PropertyType[]>([])
 
   const getProperty = async () => {
-    const tempProperties = await apiService.get('/api/properties/')
+    let url = '/api/properties/'
+    if (host_id) {
+      url += `?host_id=${host_id}`
+    }
+    const tempProperties = await apiService.get(url)
+    console.log("properties ", tempProperties.data)
     setProperties(tempProperties.data)   
   }
   useEffect(() => {

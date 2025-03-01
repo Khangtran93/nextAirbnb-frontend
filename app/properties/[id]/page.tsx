@@ -3,11 +3,14 @@ import apiService from '@/app/services/apiService'
 import Image from 'next/image'
 import React from 'react'
 import { getUserId } from '@/app/lib/action'
+import { ImageType } from '@/app/type/type'
+import Link from 'next/link'
 
 const PropertyDetail = async ({params} : {params: {id:string}}) => {
   console.log('id:', params.id)
   const property = await apiService.get(`/api/properties/${params.id}/`)
   const dataProperty = property.data
+  console.log("landlord name:", dataProperty.landlord)
   const userId = await getUserId()
   return (
     <div className='mt-4 max-w-[1200px] mx-auto'>
@@ -35,32 +38,32 @@ const PropertyDetail = async ({params} : {params: {id:string}}) => {
       </div>
 
       {/* photos */}
-      <div className='grid grid-cols-2 gap-4 rounded-lg mt-4 object-contain w-full h-[52vh]'>
+      <div className='grid grid-cols-2 gap-4 rounded-lg mt-4 object-contain w-full min-h-[400px]'>
         {/* big photo */}
         <div className='relative overflow-hidden rounded-l-lg'>
-          <Image src={dataProperty.image_url} alt="pic-1" layout="fill" className='hover:scale-105 transition'/>
+          <Image 
+          src={`${process.env.NEXT_PUBLIC_API_HOST}${dataProperty.images[0]?.image}`} 
+          alt="pic-1" layout="fill" 
+          className='hover:scale-105 transition'
+          />
         </div>
         {/* smaller photos */}
-        <div className='bg-gray-200 grid grid-cols-2 gap-2'>
-          <div className='grid grid-rows-2 gap-2'>
-            <div className='relative overflow-hidden'>
-            <Image src={dataProperty.image_url} alt="pic-1" layout="fill" className='hover:scale-105 transition'/>
+        <div className='bg-gray-200 grid grid-cols-2 gap-x-2 rounded-r-lg object-contain'>
+          <div className='grid grid-rows-2 gap-y-2'>
+           {dataProperty.images.slice(1,3).map((image: ImageType, index:number) => (
+            <div className='relative overflow-hidden h-[100%]' key={index}>
+              <Image src={`${process.env.NEXT_PUBLIC_API_HOST}${image.image}`} alt={image.image} layout="fill" className='hover:scale-105 transition'/>
             </div>
-
-            <div className='relative overflow-hidden'>
-            <Image src={dataProperty.image_url} alt="pic-1" layout="fill" className='hover:scale-105 transition'/>
-            </div>
+           ))} 
 
           </div>
-          <div className='grid grid-rows-2 gap-2'>
-            <div className='relative overflow-hidden rounded-tr-lg'>
-            <Image src={dataProperty.image_url} alt="pic-1" layout="fill" className='hover:scale-105 transition'/>
-            </div>
 
-              <div className='relative overflow-hidden rounded-br-lg'>
-              <Image src={dataProperty.image_url} alt="pic-1" layout="fill" className='hover:scale-105 transition'/>
+          <div className='grid grid-rows-2 gap-y-2'>
+            {dataProperty.images.slice(3,5).map((image: ImageType, index:number) => (
+              <div className='relative overflow-hidden h-[100%] rounded-r-lg' key={index}>
+                <Image src={`${process.env.NEXT_PUBLIC_API_HOST}${image.image}`} alt={image.image} layout="fill" className='hover:scale-105 transition'/>
               </div>
-
+            ))} 
           </div>
         </div>
 
@@ -116,7 +119,9 @@ const PropertyDetail = async ({params} : {params: {id:string}}) => {
           </div>
 
           {/* Host Info */}
-          <div className='flex flex-row w-4/5 items-center py-4 gap-4 border-b-2'>
+          <Link 
+          href={`/hosts/${dataProperty.landlord.id}`}
+          className='flex flex-row w-4/5 items-center py-4 gap-4 border-b-2' >
             {/* profile pic */}
             <div>
               <Image className='rounded-full' src="/images/host_profile_mock.jpg" alt="host-photo" width={48} height={48} />
@@ -127,7 +132,7 @@ const PropertyDetail = async ({params} : {params: {id:string}}) => {
               <p className='font-semibold'>Hosted by {dataProperty.landlord.name}</p>
               <p className='opacity-60'>Years of experience</p>
             </div>
-          </div>
+          </Link>
 
           {/* Host Traits */}
           <div className='w-4/5 border-b-2'>

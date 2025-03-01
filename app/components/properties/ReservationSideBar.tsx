@@ -8,12 +8,14 @@ import { getGuestNumber } from '@/app/util/util'
 import useLoginModal from '@/app/hooks/useLoginModal'
 import DatePicker from '../form/DatePicker'
 import apiService from '@/app/services/apiService'
+import { useRouter } from 'next/navigation'
 
 const initialDateRange = {
   startDate: new Date(),
   endDate: new Date(),
   key: 'selection'
 }
+
 export type Property = {
   id: string,
   price_per_night: number,
@@ -25,6 +27,7 @@ interface ReservationSideBarProps {
   property: Property
 }
 const ReservationSideBar: React.FC<ReservationSideBarProps> = ({userId, property}) => {
+  const router = useRouter()
   const SERVICE_FEE = 0.05
   const loginModal = useLoginModal()
   const maxGuestNumber = getGuestNumber(property.guests)
@@ -33,6 +36,7 @@ const ReservationSideBar: React.FC<ReservationSideBarProps> = ({userId, property
   const [nights, setNights] = useState<number>(1)
   const [totalPrice, setTotalPrice] = useState<number>(property.price_per_night + fee)
   const [dateRange, setDateRange] = useState<Range>(initialDateRange)
+  const [bookedDates, setBookedDates] = useState<Date[]>([])
   const [minDate, setMinDate] = useState<Date>(new Date())
   const [guests, setGuests] = useState<string>('1')
 
@@ -46,9 +50,11 @@ const ReservationSideBar: React.FC<ReservationSideBarProps> = ({userId, property
         reservationDataForm.append('number_of_nights', nights.toString())
         reservationDataForm.append('guest', guests)
         const response = await apiService.authorizedPost(`/api/properties/${property.id}/book/`, reservationDataForm)
+        console.log("response", response)
      
-        if (response.success) {
+        if (response.status_code === 400) {
           console.log("Booking successful.")
+          router.push('/')
         }
     }
     
@@ -56,6 +62,21 @@ const ReservationSideBar: React.FC<ReservationSideBarProps> = ({userId, property
     else {
       loginModal.open()
     }
+  }
+
+  const getReservationDate = async () => {
+    let dates: Date[] = [];
+
+    const reservations = await apiService.get(`/api/properties/${property.id}/reservations/`)
+
+    reservations.data.forEach((reservation: any) => {
+      const range = eachDayOfInterval({
+        start: new Date(reservation.start_date), 
+        end: new Date(reservation.end_date)
+    })
+      dates = [...dates, ...range]
+    })
+    setBookedDates(dates)
   }
   const _setDateRange = (selection: any) => {
     let newStartDate = new Date(selection.startDate)
@@ -71,6 +92,8 @@ const ReservationSideBar: React.FC<ReservationSideBarProps> = ({userId, property
   }
 
   useEffect(() => {
+    getReservationDate()
+    // console.log("BookedDates", bookedDates)
     if (dateRange.startDate && dateRange.endDate) {
     const dayCount = differenceInDays(dateRange.endDate, dateRange.startDate)
     if (dayCount > 0) {
@@ -100,6 +123,7 @@ return (
     <DatePicker
       value={dateRange}
       onChange={(value) => _setDateRange(value.selection)} 
+      bookedDates={bookedDates}
     />
   </div>
   <div className='my-4 text-lg'>

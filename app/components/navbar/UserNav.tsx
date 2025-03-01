@@ -6,12 +6,14 @@ import useSignUpModal from '@/app/hooks/useSignupModal'
 import LogoutButton from '../LogoutButton'
 import AddPropertyButton from './AddPropertyButton'
 import useAddPropertyModal from '@/app/hooks/useAddPropertyModal'
+import { useRouter } from 'next/navigation'
 
 interface userNavProps {
   userId?: string | null
 }
 
 const UserNav: React.FC<userNavProps> = ({userId}) => {
+  const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const loginModal = useLoginModal()
   const signupModal = useSignUpModal()
@@ -42,7 +44,33 @@ const UserNav: React.FC<userNavProps> = ({userId}) => {
           <div className='absolute w-[220px] mt-4 right-0 bg-white border rounded-lg py-4 shadow-lg'>
             <div className='border-b-2 pb-4 space-y-4'>
               {userId ? 
-              <LogoutButton navOpen={isOpen} setNavOpen={setIsOpen}/> : 
+              <>
+                 <MenuLink
+                  label='Profile'
+                  onClick={() => router.push(`/landlords/${userId}`)}
+                />
+
+                <MenuLink 
+                label='My Properties'
+                onClick={() => {
+                  setIsOpen(!isOpen)
+                  router.push('/myproperties/')}
+                }
+                />
+
+                <MenuLink 
+                label='My Reservations'
+                onClick={() => {
+                  setIsOpen(!isOpen)
+                  router.push('/myreservations/')}
+                }
+                
+                />
+
+                <LogoutButton navOpen={isOpen} setNavOpen={setIsOpen}/> 
+              </>
+
+: 
               (<>
                 <MenuLink
                   label='Sign up'
