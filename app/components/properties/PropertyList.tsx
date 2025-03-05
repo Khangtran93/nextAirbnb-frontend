@@ -19,7 +19,6 @@ const Properties: React.FC<PropertyListProps> = (
       url += `?host_id=${host_id}`
     }
     const tempProperties = await apiService.get(url)
-    console.log("properties ", tempProperties.data)
     setProperties(tempProperties.data)   
   }
   useEffect(() => {
