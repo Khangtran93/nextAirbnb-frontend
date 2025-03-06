@@ -34,10 +34,6 @@ const PropertyListItem : React.FC<PropertyProps> = (
         <p>${property.price_per_night}</p>
       </div>
 
-      {/* <div className='mt-2'>
-        <p>{property.description}</p>
-      </div> */}
-      
     </div>
   )
 }

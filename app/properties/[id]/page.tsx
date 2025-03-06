@@ -5,13 +5,20 @@ import React from 'react'
 import { getUserId } from '@/app/lib/action'
 import { ImageType } from '@/app/type/type'
 import Link from 'next/link'
+import FavoriteButton from '@/app/components/properties/FavoriteButton'
 
 const PropertyDetail = async ({params} : {params: {id:string}}) => {
-  console.log('id:', params.id)
-  const property = await apiService.get(`/api/properties/${params.id}/`)
-  const dataProperty = property.data
-  console.log("landlord name:", dataProperty.landlord)
   const userId = await getUserId()
+  let dataProperty
+  if (userId) {
+    const property = await apiService.authorizedGet(`/api/properties/${params.id}/`)
+    dataProperty = property.data
+  }
+  else {
+    const property = await apiService.get(`/api/properties/${params.id}/`)
+    dataProperty = property.data
+  }
+
   return (
     <div className='mt-4 max-w-[1200px] mx-auto'>
       {/* title */}
@@ -28,12 +35,18 @@ const PropertyDetail = async ({params} : {params: {id:string}}) => {
             </svg>
             Share
           </span>
-          <span className='flex gap-2 items-center'>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+          <FavoriteButton userId={userId} propertyId={params.id} favorite={dataProperty.is_favorite} />
+
+          {/* <span className='flex gap-2 items-center'>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth="1.5" className="size-6" 
+              // stroke='currentColor'
+              stroke={dataProperty.is_favorite ? "none" : "currentColor" }
+              fill={dataProperty.is_favorite ? "red" : "none"}
+              >
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
             </svg>
             Save
-          </span>
+          </span> */}
         </div>
       </div>
 
@@ -42,7 +55,7 @@ const PropertyDetail = async ({params} : {params: {id:string}}) => {
         {/* big photo */}
         <div className='relative overflow-hidden rounded-l-lg'>
           <Image 
-          src={`${process.env.NEXT_PUBLIC_API_HOST}${dataProperty.images[0]?.image}`} 
+          src={dataProperty.images[0]?.image}
           alt="pic-1" layout="fill" 
           className='hover:scale-105 transition'
           />
@@ -52,7 +65,7 @@ const PropertyDetail = async ({params} : {params: {id:string}}) => {
           <div className='grid grid-rows-2 gap-y-2'>
            {dataProperty.images.slice(1,3).map((image: ImageType, index:number) => (
             <div className='relative overflow-hidden h-[100%]' key={index}>
-              <Image src={`${process.env.NEXT_PUBLIC_API_HOST}${image.image}`} alt={image.image} layout="fill" className='hover:scale-105 transition'/>
+              <Image src={image.image} alt={image.image} layout="fill" className='hover:scale-105 transition'/>
             </div>
            ))} 
 
@@ -61,7 +74,7 @@ const PropertyDetail = async ({params} : {params: {id:string}}) => {
           <div className='grid grid-rows-2 gap-y-2'>
             {dataProperty.images.slice(3,5).map((image: ImageType, index:number) => (
               <div className='relative overflow-hidden h-[100%] rounded-r-lg' key={index}>
-                <Image src={`${process.env.NEXT_PUBLIC_API_HOST}${image.image}`} alt={image.image} layout="fill" className='hover:scale-105 transition'/>
+                <Image src={image.image} alt={image.image} layout="fill" className='hover:scale-105 transition'/>
               </div>
             ))} 
           </div>
