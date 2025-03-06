@@ -6,6 +6,7 @@ import { handleLogin } from "@/app/lib/action"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import apiService from "@/app/services/apiService"
+import { useAuthStore } from "@/app/state/store"
 
 const LoginModal = () => {
   const loginModal = useLoginModal()
@@ -23,6 +24,7 @@ const LoginModal = () => {
     const response = await apiService.post('/auth/login/', data)
     if (response && response.access) {
       handleLogin(response.user.pk, response.access, response.refresh)
+      useAuthStore.getState().setUserId(response.user.pk)
       loginModal.close()
       router.push('/')
     }
