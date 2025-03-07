@@ -12,11 +12,9 @@ const AddPropertyButton:React.FC<AddPropertyButtonProps> = ({userId}) => {
 
   const handleClick = () => {
     if (userId != null) {
-      console.log("userID not null")
       addPropertyModal.open()
     }
     else {
-      console.log("userID  null")
       loginModal.open()
     }
     
