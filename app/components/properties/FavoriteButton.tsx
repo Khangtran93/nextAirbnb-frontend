@@ -2,6 +2,7 @@
 import apiService from '@/app/services/apiService'
 import React, { useState } from 'react'
 import useLoginModal from '@/app/hooks/useLoginModal'
+import { useRouter } from 'next/navigation'
 
 interface FavoriteButtonProps {
   userId?: string | null,
@@ -15,12 +16,12 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({
 }) => {
   const loginModal = useLoginModal()
   const [isFavorite, setIsFavorite] = useState(favorite)
+  const router = useRouter()
   const toggleFavorite = async () => {
-    console.log('clicked')
-    console.log("inital favorite", favorite)
     if (userId) {
       const response = await apiService.authorizedPost(`/auth/user/favorite/${propertyId}/`, {})
       setIsFavorite(!isFavorite)
+      router.refresh()
       console.log("response ", response)
     }
     else {
