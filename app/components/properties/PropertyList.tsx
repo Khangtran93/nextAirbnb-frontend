@@ -7,20 +7,28 @@ import apiService from '@/app/services/apiService'
 
 interface PropertyListProps {
   host_id?: string | null
+  is_favorite?: boolean
 }
 const Properties: React.FC<PropertyListProps> = (
-  {host_id}
+  {host_id, is_favorite}
 ) => {
   const [properties, setProperties] = useState<PropertyType[]>([])
 
   const getProperty = async () => {
     let url = '/api/properties/'
     if (host_id) {
-      url += `?host_id=${host_id}`
+      if (is_favorite) {
+        url += 'favorites/'
+      }
+      else {
+        url += `?host_id=${host_id}`
+      }
     }
-    const tempProperties = await apiService.get(url)
-    setProperties(tempProperties.data)   
-  }
+
+      const tempProperties = await apiService.authorizedGet(url)
+      setProperties(tempProperties.data)  
+    }
+ 
   useEffect(() => {
     getProperty()
   }, [])

@@ -67,6 +67,14 @@ const UserNav: React.FC = ({}) => {
                 }
                 
                 />
+                <MenuLink 
+                label='My Favorites'
+                onClick={() => {
+                  setIsOpen(!isOpen)
+                  router.push('/myfavorites/')}
+                }
+                
+                />
 
                 <LogoutButton navOpen={isOpen} setNavOpen={setIsOpen}/> 
               </>
