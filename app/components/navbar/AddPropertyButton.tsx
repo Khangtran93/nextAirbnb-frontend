@@ -4,7 +4,7 @@ import useLoginModal from '@/app/hooks/useLoginModal'
 import React from 'react'
 
 interface AddPropertyButtonProps {
-  userId?: string | null
+  userId: string | null
 }
 const AddPropertyButton:React.FC<AddPropertyButtonProps> = ({userId}) => {
   const addPropertyModal = useAddPropertyModal()
