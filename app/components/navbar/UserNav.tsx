@@ -5,9 +5,9 @@ import useLoginModal from '@/app/hooks/useLoginModal'
 import useSignUpModal from '@/app/hooks/useSignupModal'
 import LogoutButton from '../LogoutButton'
 import AddPropertyButton from './AddPropertyButton'
-import useAddPropertyModal from '@/app/hooks/useAddPropertyModal'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/app/state/store'
+import { getUserId } from '@/app/lib/action'
 
 // interface userNavProps {
 //   userId?: string | null
@@ -18,7 +18,8 @@ const UserNav: React.FC = ({}) => {
   const [isOpen, setIsOpen] = useState(false)
   const loginModal = useLoginModal()
   const signupModal = useSignUpModal()
-  const userId = useAuthStore((state:any) => state.userId)
+  // const userId = useAuthStore((state:any) => state.userId)
+  const userId = getUserId()
   return (
     <div className='flex items-center space-x-2'>
       <AddPropertyButton userId={userId}/>
@@ -49,7 +50,7 @@ const UserNav: React.FC = ({}) => {
                  <MenuLink
                   label='Profile'
                   onClick={() => router.push(`/landlords/${userId}`)}
-                />
+                  />
 
                 <MenuLink 
                 label='My Properties'
@@ -73,7 +74,13 @@ const UserNav: React.FC = ({}) => {
                   setIsOpen(!isOpen)
                   router.push('/myfavorites/')}
                 }
-                
+                />
+                <MenuLink 
+                label='Inbox'
+                onClick={() => {
+                  setIsOpen(!isOpen)
+                  router.push('/inbox/')}
+                }
                 />
 
                 <LogoutButton navOpen={isOpen} setNavOpen={setIsOpen}/> 

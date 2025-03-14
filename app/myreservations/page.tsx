@@ -8,8 +8,6 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 const ReservationPage = async () => {
-  // const userId = await getUserId()
-  // const router = useRouter()
   const reservation = await apiService.authorizedGet('/api/properties/reservations/')
   const reservationData = reservation.data
 
