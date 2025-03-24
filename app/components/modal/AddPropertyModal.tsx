@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation'
 const AddPropertyModal = () => {
   const router = useRouter()
   const addPropertyModal = useAddPropertyModal()
-  const [currentStep, setCurrentStep] = useState(1)
+  const [currentStep, setCurrentStep] = useState<number>(1)
   const [errors, setErrors] = useState<string[]>([])
   const [propertyCategory, setPropertyCategory] = useState<string>('')
   const [propertyTitle, setPropertyTitle] = useState<string>('')
@@ -23,9 +23,9 @@ const AddPropertyModal = () => {
   const [propertyBathroom, setPropertyBathroom] = useState<string>('')
   const [propertyGuest, setPropertyGuest] = useState<string>('')
   const [propertyCountry, setPropertyCountry] = useState<SelectCountryValue | undefined>()
-  const [propertyImage, setPropertyImage] = useState<File | undefined>()
+  // const [propertyImage, setPropertyImage] = useState<File | undefined>()
   let imageArr: File[] = []
-  let imageUrls: any[] = []
+
   const [images, setImages] = useState<File[]>([])
 
   useEffect(() => {
@@ -33,22 +33,14 @@ const AddPropertyModal = () => {
     console.log('length_imageArr', imageArr.length)
     console.log("images", images)
     console.log("length_images", images.length)
-    imageUrls.forEach(image => {
-      console.log("url", image)
-      
-    })
-  },[images, imageUrls])
+  },[images])
 
   const uploadImage = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       imageArr.push(file);
-      imageUrls.push(URL.createObjectURL(imageArr[0]))
       setImages([...images, ...imageArr]); // Update state with the new files
     }
-    // imageArr.push(event.target.files[0])
-    // imageUrls.push(URL.createObjectURL(imageArr[0][0]))
-    // setImages(...images, imageArr)
   }
 
   const incrementStep = () => {
@@ -63,13 +55,13 @@ const AddPropertyModal = () => {
     setPropertyCategory(category)
   }
 
-  const setImage = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log("file", event.target.files)
-    if (event.target.files && event.target.files.length > 0) {
-      const tmpImage = event.target.files[0]
-      setPropertyImage(tmpImage)
-    }
-  }
+  // const setImage = (event: ChangeEvent<HTMLInputElement>) => {
+  //   console.log("file", event.target.files)
+  //   if (event.target.files && event.target.files.length > 0) {
+  //     const tmpImage = event.target.files[0]
+  //     setPropertyImage(tmpImage)
+  //   }
+  // }
 
   const submitForm = async () => {
     console.log('submit')
@@ -86,20 +78,6 @@ const AddPropertyModal = () => {
       // propertyImage
     ) {
 
-      // console.log(propertyBathroom, propertyCategory, propertyTitle, propertyBedroom, propertyGuest, propertyCountry, propertyImage)
-    
-      // const data = {
-      //   title: propertyTitle,
-      //   category: propertyCategory,
-      //   description: propertyDesc,
-      //   price_per_night: propertyPrice,
-      //   bedrooms: propertyBedroom,
-      //   bathrooms: propertyBathroom,
-      //   guests: propertyGuest,
-      //   country: propertyCountry.value,
-      //   country_code: propertyCountry.label,
-      //   image: propertyImage,
-      // }
         console.log('submitting')
         const data = new FormData()
         data.append('title', propertyTitle) 
@@ -129,15 +107,12 @@ const AddPropertyModal = () => {
         const tmpErrors: string[] = Object.values(response.errors || {}).map((error:any) => {
           return error
         })
-  
         setErrors(tmpErrors)
         addPropertyModal.close()
         router.push('/')
       }
-
-    
     }
-
+    router.refresh()
     console.log('after submit')
   }
 
@@ -221,18 +196,6 @@ const AddPropertyModal = () => {
           <CustomButton label="Previous" className='w-full bg-enbnb-black hover:bg-gray-600' onClick={decrementStep}/>
           <CustomButton label="Next" className='w-full' onClick={incrementStep}/>
         </div>
-      {/* <div className='mb-6'>
-        <h3 className='text-l text-left mb-2'>Select Country</h3>
-        <input 
-          type="number"
-          value={propertyPrice}
-          onChange={(e) => setPropertyPrice(e.target.value)}
-          className='border p-2 border-gray-400 rounded-xl w-full'/>
-        <div className=' mt-4 space-y-4'>
-          <CustomButton label="Previous" className='bg-black w-full' onClick={decrementStep}/>
-          <CustomButton label="Next" className='w-full' onClick={incrementStep}/>
-        </div>
-      </div> */}
     </> :
     <>
     <div className=''>
@@ -243,60 +206,29 @@ const AddPropertyModal = () => {
         onChange={uploadImage}
         className='flex mb-4'
       />)}
-    <div className='flex flex-wrap w-full h-auto max-h-[250px] gap-2 overflow-y-scroll'>
-       {images.length !== 0 && images.map((image, index) => (
-         <div className='w-[calc((100%-20px)/3)] h-auto relative rounded-xl' key={index} >
-          <div className='w-full h-[150px] relative'>
-            <Image
-              fill
-              alt='uploaded-image' 
-              src={URL.createObjectURL(image)}
-              className='object-cover w-full h-[150px] rounded-xl'/>
-          </div>
-          <div className='text-center break-words'>
-            {image.name}
-          </div>
-        </div>
-       ))}
-       </div>
-      
-      </div>
-      
-
-   
-      <div className='mb-6'>
-        {/* <h3 className="mb-2 mt-2 text-left">Choose an image:</h3> */}
-        {/* <div className='py-4 px-6 bg-gray-400 rounded-xl text-white text-left'> */}
-{/*           
-            <input
-            type='file'
-            // multiple
-            className=''
-            accept='image/*'
-            onChange={setImage}
-          /> */}
-          
-          
-        {/* </div> */}
-        {propertyImage && 
-        <div className='w-[200px] h-[150px] relative mt-4 grid grid-cols-2'>
+      <div className='flex flex-wrap w-full h-auto max-h-[250px] gap-2 overflow-y-scroll'>
+        {images.length !== 0 && images.map((image, index) => (
+          <div className='w-[calc((100%-20px)/3)] h-auto relative rounded-xl' key={index} >
+            <div className='w-full h-[150px] relative'>
               <Image
-              fill
-              alt='uploaded-image' 
-              src={URL.createObjectURL(propertyImage)} //this javascript method creates a temporary url
-              className='w-full h-full object-cover rounded-xl'
-            />
-        </div>}
+                fill
+                alt='uploaded-image' 
+                src={URL.createObjectURL(image)}
+                className='object-cover w-full h-[150px] rounded-xl'/>
+            </div>
+            <div className='text-center break-words'>
+              {image.name}
+            </div>
+          </div>
+        ))}
       </div>
-
+    </div>
       <div className=' mt-4 space-y-4'>
         <CustomButton label="Previous" className='w-full bg-enbnb-black hover:bg-gray-600' onClick={decrementStep}/>
         <CustomButton label="Submit" className='w-full' onClick={submitForm}/>
       </div>
     </>
-    
     }
-    
     </>
   )
   return (

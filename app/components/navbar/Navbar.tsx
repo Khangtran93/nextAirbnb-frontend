@@ -27,7 +27,7 @@ const Navbar = async () => {
             </div>
           </div>
           <div className='flex space-x-6'>
-            <UserNav/>
+            <UserNav userId={userId}/>
           </div>
         </div>
       </div>

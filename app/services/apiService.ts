@@ -37,15 +37,23 @@ const apiService = {
     })
   },
 
-  post: async function(url:string, data:any): Promise<any> {
+  post: async function(url:string, data:any, isFileUpload = false): Promise<any> {
+    let body: BodyInit
+    let headers: HeadersInit = {"Accept": "application/json"}
+    if (isFileUpload) {
+      console.log("uploading file")
+      body = data
+    }
+    else {
+      console.log("not uploading file")
+      body = JSON.stringify(data)
+      headers['Content-Type'] = 'application/json'
+    }
     return new Promise((resolve, reject) => {
       fetch(`${process.env.NEXT_PUBLIC_API_HOST}${url}`,{
         method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
+        body: body,
+        headers: headers
     })
     .then(response => response.json())
     .then((json) => {

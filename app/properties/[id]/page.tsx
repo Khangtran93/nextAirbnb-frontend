@@ -37,16 +37,6 @@ const PropertyDetail = async ({params} : {params: {id:string}}) => {
           </span>
           <FavoriteButton userId={userId} propertyId={params.id} favorite={dataProperty.is_favorite} />
 
-          {/* <span className='flex gap-2 items-center'>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth="1.5" className="size-6" 
-              // stroke='currentColor'
-              stroke={dataProperty.is_favorite ? "none" : "currentColor" }
-              fill={dataProperty.is_favorite ? "red" : "none"}
-              >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-            </svg>
-            Save
-          </span> */}
         </div>
       </div>
 
@@ -137,13 +127,13 @@ const PropertyDetail = async ({params} : {params: {id:string}}) => {
           className='flex flex-row w-4/5 items-center py-4 gap-4 border-b-2' >
             {/* profile pic */}
             <div>
-              <Image className='rounded-full' src="/images/host_profile_mock.jpg" alt="host-photo" width={48} height={48} />
+              <Image className='rounded-full' src={dataProperty.landlord.avatar ? dataProperty.landlord.avatar : "/images/host_profile_mock.jpg" } alt="host-photo" width={48} height={48} />
             </div>
 
             {/* info */}
             <div>
               <p className='font-semibold'>Hosted by {dataProperty.landlord.name}</p>
-              <p className='opacity-60'>Years of experience</p>
+              <p className='opacity-60'>{dataProperty.landlord.year_experience} {dataProperty.landlord.year_experience <= 1 ? "year" : "years"} of experience</p>
             </div>
           </Link>
 
