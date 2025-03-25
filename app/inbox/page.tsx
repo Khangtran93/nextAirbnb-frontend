@@ -10,9 +10,11 @@ const InboxPage = async () => {
     <main className='max-w-[1500px] px-6 pb-6 mx-auto space-y-4'>
       <h1 className='text-2xl'>Inbox</h1>
       <div className='space-y-4'>
-        {conversationData.map((conversation:any, index:any) => (
+        {conversationData.length > 0 ? conversationData.map((conversation:any, index:any) => (
           <Conversation key={index} id={conversation.id} receivers={conversation.receivers}/>
-        ))}
+        )) : (
+          <p>No conversations found.</p>
+        )}
         
       </div>
     </main>
