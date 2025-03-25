@@ -26,7 +26,8 @@ const LoginModal = () => {
       handleLogin(response.user.pk, response.access, response.refresh)
       useAuthStore.getState().setUserId(response.user.pk)
       loginModal.close()
-      router.push('/')
+      router.refresh()
+      // router.push('/')
     }
     else {
       setErrors(response.non_field_errors)

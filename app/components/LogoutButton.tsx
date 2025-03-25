@@ -16,6 +16,8 @@ const LogoutButton: React.FC<LogoutProp> = ({navOpen, setNavOpen}) => {
     useAuthStore.getState().setUserId('')
     setNavOpen(!navOpen)
     router.push('/')
+    router.refresh()
+    
   }
   return (
     <MenuLink

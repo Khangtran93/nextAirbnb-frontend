@@ -6,20 +6,18 @@ import useSignUpModal from '@/app/hooks/useSignupModal'
 import LogoutButton from '../LogoutButton'
 import AddPropertyButton from './AddPropertyButton'
 import { useRouter } from 'next/navigation'
-import { useAuthStore } from '@/app/state/store'
-import { getUserId } from '@/app/lib/action'
 
-// interface userNavProps {
-//   userId?: string | null
-// }
 
-const UserNav: React.FC = ({}) => {
+interface UserNavProps {
+  userId: string | null
+}
+
+const UserNav: React.FC<UserNavProps> = ({userId}) => {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const loginModal = useLoginModal()
   const signupModal = useSignUpModal()
   // const userId = useAuthStore((state:any) => state.userId)
-  const userId = getUserId()
   return (
     <div className='flex items-center space-x-2'>
       <AddPropertyButton userId={userId}/>
