@@ -101,9 +101,9 @@ const ConversationDetail: React.FC<ConversationDetailProps> = ({
         >
         {realTimeMessage.map((message: Message, index: number) => 
         (
-          <>
+          <div key={index}>
           {message.sender.id === myUser?.id ? (
-            <div className='w-[60%] ml-auto rounded-xl my-2 bg-blue-200 px-6 py-4 max-w-max' key={index}>
+            <div className='w-[60%] ml-auto rounded-xl my-2 bg-blue-200 px-6 py-4 max-w-max'>
               <p className='font-bold'>{myUser.name}</p>
               <p>{message.body}</p>
             </div>) : (
@@ -112,7 +112,7 @@ const ConversationDetail: React.FC<ConversationDetailProps> = ({
               <p>{message.body}</p>
             </div>
           )}
-          </>))}
+          </div>))}
       </div>
       <div className='mt-4 p-4 border border-gray-300 rounded-xl flex space-x-4 bg-white sticky bottom-0'>
         <input 
