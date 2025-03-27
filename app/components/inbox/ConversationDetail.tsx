@@ -32,8 +32,8 @@ const ConversationDetail: React.FC<ConversationDetailProps> = ({
   token,
 
 }) => {
-  const myUser = conversation.users.find((user) => user.id === userId)
-  const otherUser = conversation.users.find((user) => user.id !== userId)
+  const myUser = conversation?.users.find((user) => user.id === userId)
+  const otherUser = conversation?.users.find((user) => user.id !== userId)
   const messageDiv = useRef(null)
   const [newMessage, setNewMessage] = useState<string>("")
   const [realTimeMessage, setRealTimeMessage] = useState<Message[]>(conversation.messages)
@@ -97,7 +97,7 @@ const ConversationDetail: React.FC<ConversationDetailProps> = ({
         {otherUser?.name}
       </div>
       <div ref={messageDiv} 
-          className="overflow-y-scroll scrollbar scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 mb-0 px-4"
+          className="min-h-[400px] overflow-y-scroll scrollbar scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 mb-0 px-4"
         >
         {realTimeMessage.map((message: Message, index: number) => 
         (

@@ -19,6 +19,8 @@ const PropertyDetail = async ({params} : {params: {id:string}}) => {
     dataProperty = property.data
   }
 
+  console.log("data property landloard avatar", dataProperty.landlord.avatar)
+
   return (
     <div className='mt-4 max-w-[1200px] mx-auto'>
       {/* title */}
