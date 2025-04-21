@@ -11,8 +11,9 @@ export type SelectCountryValue = {
 interface SelectCountryProps {
   value?: SelectCountryValue,
   onChange: (value: SelectCountryValue) => void;
+  onKeyDown: (e:any) => void
 }
-const SelectCountry: React.FC<SelectCountryProps> = ({value, onChange}) => {
+const SelectCountry: React.FC<SelectCountryProps> = ({value, onChange, onKeyDown}) => {
   const {getAll} = useCountries()
   return (
     <>
@@ -22,6 +23,7 @@ const SelectCountry: React.FC<SelectCountryProps> = ({value, onChange}) => {
       options={getAll()}
       value={value}
       onChange={(value) => onChange(value as SelectCountryValue)}
+      onKeyDown={onKeyDown}
     />
     </>
   )

@@ -12,7 +12,6 @@ const Modal: React.FC<ModalProps> = ({label, content, isOpen, close}) => {
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
-    console.log("value of isOpen is ", isOpen)
     setShowModal(isOpen)
   }, [isOpen])
 

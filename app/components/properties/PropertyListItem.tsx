@@ -12,7 +12,7 @@ const PropertyListItem : React.FC<PropertyProps> = (
 ) => {
   const router = useRouter()
   useEffect(() => {
-    console.log("url", property.images[0].image)
+    // console.log("url", property.images[0].image)
   }, [property])
   return (
     <div className='cursor-pointer' onClick={() => router.push(`/properties/${property.id}`)}>

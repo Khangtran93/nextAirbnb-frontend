@@ -18,9 +18,10 @@ const DatePicker: React.FC<DatePickerProps> = ({value, onChange, bookedDates}) =
       ranges={[value]}
       date={new Date()}
       onChange={onChange}
-      direction='vertical'
+      direction='horizontal'
       showDateDisplay={false}
       minDate={new Date()}
+      months={2}
       disabledDates={bookedDates}
     />
    </>
