@@ -1,32 +1,48 @@
+'use client'
+import useSearchModal from '@/app/hooks/useSearchModal'
 import React from 'react'
 
 const SearchFilter = () => {
+  const searchModal = useSearchModal()
   return (
     <div className='h-[64px] flex flex-row justify-between items-center rounded-full border-2 shadow-lg'>
         <div className='flex flex-row items-center justify-between'>
-          <div className='hidden md:flex cursor-pointer w-[250px] h-[64px] px-4 lg:px-8 flex flex-col justify-center hover:bg-gray-200 rounded-full'>
+          <div 
+            onClick={() => {
+              searchModal.open("location"
+              )}}
+            className='hidden md:flex cursor-pointer w-[250px] h-[64px] px-4 lg:px-8 flex flex-col justify-center hover:bg-gray-200 rounded-full'>
             <p className='text-xs font-semibold'>Where</p>
             <p className='text-sm'>Search destinations</p>
           </div>
 
-          <div className='hidden md:flex cursor-pointer h-[64px] px-4 lg:px-8 flex flex-col justify-center hover:bg-gray-200 rounded-full'>
+          <div 
+            onClick={() => searchModal.open("checkin")}
+            className='hidden md:flex cursor-pointer h-[64px] px-4 lg:px-8 flex flex-col justify-center hover:bg-gray-200 rounded-full'>
             <p className='text-xs font-semibold'>Check in</p>
             <p className='text-sm'>Add dates</p>
           </div>
 
-          <div className='hidden md:flex cursor-pointer h-[64px] px-4 lg:px-8 flex flex-col justify-center hover:bg-gray-200 rounded-full'>
+          <div 
+            onClick={() => searchModal.open("checkout")}
+            className='hidden md:flex cursor-pointer h-[64px] px-4 lg:px-8 flex flex-col justify-center hover:bg-gray-200 rounded-full'>
             <p className='text-xs font-semibold'>Check out</p>
             <p className='text-sm'>Add dates</p>
           </div>
 
-          <div className='flex flex-row  h-[64px] hover:bg-gray-200 rounded-full'>
+          <div 
+            onClick={() => searchModal.open("details")}
+            className='flex flex-row  h-[64px] hover:bg-gray-200 rounded-full'
+            >
             <div className='hidden md:flex cursor-pointer px-4 lg:px-8 flex flex-col justify-center hover:bg-gray-200 rounded-full'>
               <p className='text-xs font-semibold'>Who</p>
               <p className='text-sm'>Add guests</p>
             </div>
-
-            <div className='p-2'>
-              <div className='cursor-pointer p-4 bg-enbnb rounded-full hover:bg-enbnb-dark transition'>
+            </div>
+            <div 
+              onClick={() => searchModal.open("")}
+              className='p-2 hover:bg-gray-200 rounded-full'>
+              <div className='cursor-pointer p-4 bg-enbnb rounded-full transition'>
                 <svg  viewBox="0 0 32 32" 
                   style={{display: 'block', fill: 'none', height: '16px' ,width: '16px', stroke: 'currentColor', strokeWidth: 4, overflow: 'visible', color: 'white'}} 
                   aria-hidden="true" role="presentation" focusable="false">
@@ -34,7 +50,7 @@ const SearchFilter = () => {
                 </svg>
               </div> 
             </div>
-          </div>
+          
         </div>
 
      

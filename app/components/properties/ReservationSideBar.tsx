@@ -81,9 +81,6 @@ const ReservationSideBar: React.FC<ReservationSideBarProps> = ({userId, property
   const _setDateRange = (selection: any) => {
     let newStartDate = new Date(selection.startDate)
     let newEndDate = new Date(selection.endDate)
-    // if (newStartDate > newEndDate) {
-    //   newEndDate = newStartDate.getDate() + 1
-    // }
     setDateRange({
       ...dateRange,
       startDate: newStartDate,
@@ -93,7 +90,7 @@ const ReservationSideBar: React.FC<ReservationSideBarProps> = ({userId, property
 
   useEffect(() => {
     getReservationDate()
-    // console.log("BookedDates", bookedDates)
+
     if (dateRange.startDate && dateRange.endDate) {
     const dayCount = differenceInDays(dateRange.endDate, dateRange.startDate)
     if (dayCount > 0) {

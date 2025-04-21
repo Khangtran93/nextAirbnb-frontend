@@ -101,7 +101,7 @@ const AddPropertyModal = () => {
 
       if (response.success) {
         addPropertyModal.close()
-        router.push('/')
+        router.refresh()
       }
       else {
         const tmpErrors: string[] = Object.values(response.errors || {}).map((error:any) => {
@@ -112,7 +112,7 @@ const AddPropertyModal = () => {
         router.push('/')
       }
     }
-    router.refresh()
+    // router.refresh()
     console.log('after submit')
   }
 
